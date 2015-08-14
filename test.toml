@@ -1,0 +1,8 @@
+# TOML test config file
+
+title = "TOML test"
+
+PathToExtractedLocalizationFiles = "ExtractedTranslationFiles2"
+ProjectName = "Dreamlines App.xcodeproj"
+Languages = ["en"]
+
