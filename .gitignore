@@ -1,9 +1,11 @@
-*.impl
+
 .idea
 *.save
 *.o
 *.a
 *.so
+
+
 # Compiled source #
 ###################
 *.com
