@@ -1,9 +1,10 @@
-package main
+package utilities
 
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -19,11 +20,12 @@ func NewConfigFromPath(path string) *Config {
 		wdString, err := os.Getwd()
 
 		if err != nil {
-			//Logger.Fatal(err.Error())
+			fmt.Errorf("Could not open current working directory")
 		}
 
-		path = fmt.Sprint(wdString, "/test.toml")
-		//utilities.Logger.Info("Using:",path," as config file")
+		path = strings.Join([]string{wdString, "test.toml"}, "/")
+	} else {
+		path = strings.Join([]string{path, "test.toml"}, "/")
 	}
 
 	_, err := toml.DecodeFile(path, &config)

@@ -2,7 +2,7 @@
 
 title = "TOML test"
 
-PathToExtractedLocalizationFiles = "ExtractedTranslationFiles2"
+PathToExtracteFiles = "ExtractedTranslationFiles2"
 ProjectName = "Dreamlines App.xcodeproj"
 Languages = ["en"]
 

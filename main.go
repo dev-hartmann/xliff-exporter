@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	utilities "xliff-exporter/Utilities"
 )
 
 var (
@@ -13,38 +14,27 @@ var (
 	configFilePath    = flag.String("configPath", "pwd", "Path to config file, when not specified uses current working directory")
 )
 
-func printOutput(outs []byte) {
-	if len(outs) > 0 {
-		fmt.Printf("==> Output: %s\n", string(outs))
-	}
-}
-
-func printError(err error) {
-	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("==> Error: %s\n", err.Error()))
-	}
-}
-
-func createAndExecuteCommand(config *Config, lang string) {
+func createAndExecuteCommand(config *utilities.Config, lang string) {
 
 	cmd := exec.Command("xcodebuild", "-exportLocalizations", "-project", config.ProjectName, "-localizationPath", config.PathToExtractedLocalizationFiles, "-exportLanguage", lang)
-	fmt.Println("-> cmd:", cmd)
 	output, err := cmd.CombinedOutput()
 
 	if err != nil {
 		fmt.Println("error")
-		printError(err)
+		utilities.PrintError(err)
+		return
 	}
 
 	if output != nil {
 		fmt.Println("output")
-		printOutput(output)
+		utilities.PrintOutput(output)
 	}
 
-}
+	err = os.Chdir(config.PathToExtractedLocalizationFiles)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
-func createArgFromStrings(argPrefix, argValue string) string {
-	return fmt.Sprintf(argPrefix, argValue)
 }
 
 func init() {
@@ -53,12 +43,10 @@ func init() {
 
 func main() {
 
-	config := NewConfigFromPath(*configFilePath)
+	config := utilities.NewConfigFromPath(*configFilePath)
 
 	if *pathToProject != "pwd" {
-		fmt.Println(*pathToProject, "<- inside unequals pwd")
-		pathProjectArg := createArgFromStrings("%q", *pathToProject)
-		err := os.Chdir(pathProjectArg)
+		err := os.Chdir(*pathToProject)
 
 		if err != nil {
 			fmt.Println(err.Error())
