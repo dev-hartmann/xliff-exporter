@@ -1,10 +1,10 @@
 package utilities
 
 import (
-	"os/exec"
-	"os"
-	"strings"
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 )
 
 func GitInit(path string) bool {
@@ -17,13 +17,13 @@ func GitAdd(path string) bool {
 }
 
 func GitCommit(path, commitMessage string) bool {
-	return executeGitCommand(path, "commit", "-m", fmt.Sprintf(`"%s"`,commitMessage))
+	return executeGitCommand(path, "commit", "-m", fmt.Sprintf(`"%s"`, commitMessage))
 }
 
 func GitPush(path, origin, branch string) bool {
 	return executeGitCommand(path, "push", origin, branch)
 }
-func executeGitCommand(path string, params ... string) bool {
+func executeGitCommand(path string, params ...string) bool {
 
 	argString := strings.Join(params, " ")
 
@@ -33,17 +33,10 @@ func executeGitCommand(path string, params ... string) bool {
 		return false
 	}
 
-	cmd := exec.Command("git",argString)
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-		PrintError(err)
-		return false
-	}
-
-	if output != nil {
-		PrintOutput(output)
-	}
+	cmd := exec.Command("git", argString)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 
 	return true
 }

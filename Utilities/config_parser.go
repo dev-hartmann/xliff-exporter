@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	Languages                        []string
-	ProjectName                      string
-	PathToExtractedLocalizationFiles string
+	Languages         []string
+	ProjectName       string
+	LocalizationsPath string
+	ProjectPath       string
 }
 
 func NewConfigFromPath(path string) *Config {
@@ -20,7 +21,7 @@ func NewConfigFromPath(path string) *Config {
 		wdString, err := os.Getwd()
 
 		if err != nil {
-			fmt.Errorf("Could not open current working directory")
+			fmt.Errorf("Could not open current working directory, error:%v", err.Error())
 		}
 
 		path = strings.Join([]string{wdString, "test.toml"}, "/")
